@@ -1,0 +1,14 @@
+<section data-ng-controller="HomeController">
+	<div class="row hidden-xs">
+	<!-- File Dropzone -->
+		<div class="col-md-12">
+			<div ngf-select ngf-drop ng-model="file" ng-model-rejected="reject" class="drop-box" ng-show="!removeDropzone" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="handleFileSelect()" ngf-accept="'text/csv'" accept=".csv">
+				<p class="lead">drop csv file here or <br/>click to browse<p>
+		    </div>
+	    </div>
+
+	    <div class="col-md-12">
+	    	{{results}}
+	    </div>
+	</div>
+</section>
