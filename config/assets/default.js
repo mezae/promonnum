@@ -15,7 +15,8 @@ module.exports = {
                 'public/lib/angular-ui-utils/ui-utils.js',
                 'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/ng-file-upload/ng-file-upload.js',
-            'public/lib/lodash/lodash.js'
+                'public/lib/lodash/lodash.js',
+                'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js'
             ],
             tests: ['public/lib/angular-mocks/angular-mocks.js']
         },

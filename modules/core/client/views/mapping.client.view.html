@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add Mapping</h4>
+</div>
+<div class="modal-bodyß">
+	<p>Match up your column field names to required fields</p>
+	<ul>
+		<li>Start Date</li>
+		<li>Campaign</li>
+		<li>Service Type</li>
+		<li>Capacity</li>
+		<li>Attendance</li>
+		<li>Fullness</li>
+	</ul>
+	<ul dnd-list="model.lists.A">
+		<li	ng-repeat="item in model.lists.A track by $index"
+			dnd-draggable="item"
+        	dnd-moved="model.lists.A.splice($index, 1)"
+        	dnd-effect-allowed="move"
+	        dnd-selected="model.selected = item"
+    		ng-class="{'selected': model.selected === item}"
+        >
+        {{item}}
+    	</li>
+	</ul>
+
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-upload" ng-click="ok()">OK</button>
+</div>

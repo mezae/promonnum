@@ -15,7 +15,8 @@ module.exports = {
                 'public/lib/angular-ui-utils/ui-utils.min.js',
                 'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
                 'public/lib/ng-file-upload/ng-file-upload.min.js',
-                'public/lib/lodash/lodash.min.js'
+                'public/lib/lodash/lodash.min.js',
+                'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js'
             ]
         },
         css: 'public/dist/application.min.css',

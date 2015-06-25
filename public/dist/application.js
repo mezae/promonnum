@@ -5,7 +5,7 @@ var ApplicationConfiguration = (function() {
     // Init module configuration options
     var applicationModuleName = 'promonnum';
 
-    var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngFileUpload'];
+    var applicationModuleVendorDependencies = ['ngResource', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ngFileUpload', 'dndLists'];
 
     // Add a new vertical module
     var registerModule = function(moduleName, dependencies) {
@@ -228,12 +228,23 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
 
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication',
-    function($scope, Authentication) {
+angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authentication',
+    function($scope, $modal, Authentication) {
         // This provides Authentication context.
         $scope.authentication = Authentication;
 
         function processProjects(rows, headers) {
+            $scope.headers = headers;
+            var modal = $modal.open({
+                templateUrl: 'modules/core/views/mapping.client.view.html',
+                controller: 'ModalInstanceCtrl',
+                backdrop: 'static',
+                resolve: {
+                    items: function() {
+                        return $scope.headers;
+                    }
+                }
+            });
             headers = {
                 sdate_col: headers.indexOf('Start Date'),
                 campaign_col: headers.indexOf('Campaign Name'),
@@ -351,6 +362,22 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
             }
         };
 
+    }
+])
+
+.controller('ModalInstanceCtrl', ['$state', '$scope', '$filter', '$modalInstance', 'Authentication', 'items',
+    function($state, $scope, $filter, $modalInstance, Authentication, items) {
+        $scope.user = Authentication.user;
+        $scope.model = {
+            selected: null,
+            lists: {
+                A: items
+            }
+        };
+
+        $scope.ok = function() {
+            $modalInstance.close();
+        };
     }
 ]);
 'use strict';
