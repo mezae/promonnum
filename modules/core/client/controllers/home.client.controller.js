@@ -11,6 +11,7 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                 templateUrl: 'modules/core/views/mapping.client.view.html',
                 controller: 'ModalInstanceCtrl',
                 backdrop: 'static',
+                size: 'lg',
                 resolve: {
                     items: function() {
                         return $scope.headers;
@@ -143,9 +144,16 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         $scope.model = {
             selected: null,
             lists: {
-                A: items
+                A: [],
+                B: []
             }
         };
+        // Generate initial model
+        for (var i = 0; i < items.length; ++i) {
+            $scope.model.lists.A.push({
+                label: items[i]
+            });
+        }
 
         $scope.ok = function() {
             $modalInstance.close();

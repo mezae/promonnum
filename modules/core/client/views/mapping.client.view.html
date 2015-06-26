@@ -1,27 +1,51 @@
 <div class="modal-header">
-  <h4 class="modal-title">Add Mapping</h4>
+  <h4 class="modal-title">Add Field Mapping</h4>
 </div>
-<div class="modal-bodyß">
-	<p>Match up your column field names to required fields</p>
-	<ul>
-		<li>Start Date</li>
-		<li>Campaign</li>
-		<li>Service Type</li>
-		<li>Capacity</li>
-		<li>Attendance</li>
-		<li>Fullness</li>
-	</ul>
-	<ul dnd-list="model.lists.A">
-		<li	ng-repeat="item in model.lists.A track by $index"
-			dnd-draggable="item"
-        	dnd-moved="model.lists.A.splice($index, 1)"
-        	dnd-effect-allowed="move"
-	        dnd-selected="model.selected = item"
-    		ng-class="{'selected': model.selected === item}"
-        >
-        {{item}}
-    	</li>
-	</ul>
+<div class="modal-body">
+	<p>Match your column names to required fields</p>
+	<div class="col-md-11">
+		<ul dnd-list="model.lists.A" dnd-horizontal-list="true">
+			<li	class="csvheaders"
+				ng-repeat="item in model.lists.A"
+				dnd-draggable="item"
+	        	dnd-moved="model.lists.A.splice($index, 1)"
+	        	dnd-effect-allowed="move"
+		        dnd-selected="model.selected = item"
+	    		ng-class="{'selected': model.selected === item}"
+	        >
+	        {{item.label}}
+	    	</li>
+		</ul>
+	</div>
+	<div class="row">
+			<div class="col-md-6">
+				Required Fields
+				<ul class="reqlist">
+					<li class="required">Start Date</li>
+					<li class="required">Campaign</li>
+					<li class="required">Service Type</li>
+					<li class="required">Capacity</li>
+					<li class="required">Attendance</li>
+					<li class="required">Fullness</li>
+				</ul>
+			</div>
+		
+			<div class="col-md-6">
+				Matching Column Name
+				<ul dnd-list="model.lists.B">
+				    <li ng-repeat="item in model.lists.B"
+				        dnd-draggable="item"
+				        dnd-moved="model.lists.B.splice($index, 1)"
+				        dnd-effect-allowed="move"
+				        dnd-selected="models.selected = item"
+				        ng-class="{'selected': models.selected === item}"
+				        >
+				        {{item.label}}
+				    </li>
+				</ul>
+			</div>
+
+	</div>
 
 </div>
 <div class="modal-footer">
