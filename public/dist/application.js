@@ -234,98 +234,131 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         $scope.authentication = Authentication;
 
         function processProjects(rows, headers) {
-            $scope.headers = headers;
+            var required_fields = ['Start Date', 'Campaign', 'Service Type', 'Capacity', 'Attendance', 'Fullness'];
             var modal = $modal.open({
                 templateUrl: 'modules/core/views/mapping.client.view.html',
                 controller: 'ModalInstanceCtrl',
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    items: function() {
-                        return $scope.headers;
+                    arrays: function() {
+                        return {
+                            required_fields: required_fields,
+                            headers: headers
+                        };
                     }
                 }
             });
-            headers = {
-                sdate_col: headers.indexOf('Start Date'),
-                campaign_col: headers.indexOf('Campaign Name'),
-                service_col: headers.indexOf('Service Type'),
-                capacity_col: headers.indexOf('Capacity'),
-                attendance_col: headers.indexOf('Official Attendance'),
-                fullness_col: headers.indexOf('Fullness Rate')
-            };
 
-            $scope.myProjects = [];
+            modal.result.then(function(csvheaders) {
+                headers = {
+                    sdate_col: headers.indexOf(csvheaders[0].label),
+                    campaign_col: headers.indexOf(csvheaders[1].label),
+                    service_col: headers.indexOf(csvheaders[2].label),
+                    capacity_col: headers.indexOf(csvheaders[3].label),
+                    attendance_col: headers.indexOf(csvheaders[4].label),
+                    fullness_col: headers.indexOf(csvheaders[5].label)
+                };
 
-            var i = 0;
-            while (i < rows.length) {
-                var record = rows[i].split(',');
-                if (!record[0]) {
-                    i = rows.length;
-                } else {
-                    $scope.myProjects.push({
-                        start_date: new Date(record[headers.sdate_col]),
-                        campaign: record[headers.campaign_col],
-                        service_type: record[headers.service_col],
-                        capacity: parseInt(record[headers.capacity_col], 10),
-                        attendance: parseInt(record[headers.attendance_col], 10),
-                        fullness: parseFloat(record[headers.fullness_col])
-                    });
+                $scope.myProjects = [];
 
-                    var group = _.find($scope.results, {
-                        'service_type': record[headers.service_col]
-                    });
-                    if (group) {
-                        group.totalCapacity += parseInt(record[headers.capacity_col], 10);
-                        group.totalAttendance += parseInt(record[headers.attendance_col], 10);
-                        if (parseFloat(record[headers.fullness_col]) < 50) group.lowFullness++;
+                var i = 0;
+                while (i < rows.length) {
+                    var record = rows[i].split(',');
+                    if (!record[0]) {
+                        i = rows.length;
                     } else {
-                        $scope.results.push({
+                        $scope.myProjects.push({
+                            start_date: new Date(record[headers.sdate_col]),
+                            campaign: record[headers.campaign_col],
                             service_type: record[headers.service_col],
-                            totalCapacity: parseInt(record[headers.capacity_col], 10),
-                            totalAttendance: parseInt(record[headers.attendance_col], 10),
-                            lowFullness: parseFloat(record[headers.fullness_col]) < 50 ? 1 : 0
+                            capacity: parseInt(record[headers.capacity_col], 10),
+                            attendance: parseInt(record[headers.attendance_col], 10),
+                            fullness: parseFloat(record[headers.fullness_col])
                         });
+
+                        var group = _.find($scope.results, {
+                            'service_type': record[headers.service_col]
+                        });
+                        if (group) {
+                            group.totalCapacity += parseInt(record[headers.capacity_col], 10);
+                            group.totalAttendance += parseInt(record[headers.attendance_col], 10);
+                            if (parseFloat(record[headers.fullness_col]) < 50) group.lowFullness++;
+                        } else {
+                            $scope.results.push({
+                                service_type: record[headers.service_col],
+                                totalCapacity: parseInt(record[headers.capacity_col], 10),
+                                totalAttendance: parseInt(record[headers.attendance_col], 10),
+                                lowFullness: parseFloat(record[headers.fullness_col]) < 50 ? 1 : 0
+                            });
+                        }
+                        i++;
                     }
-                    i++;
                 }
-            }
+            });
         }
 
         function processImpacts(rows, headers) {
-            headers = {
-                sdate_col: headers.indexOf('Start Date'),
-                campaign_col: headers.indexOf('Campaign Name'),
-                service_col: headers.indexOf('Service Type'),
-                itype_col: headers.indexOf('Impact Type'),
-                iquantity_col: headers.indexOf('Impact Quantity')
-            };
-
-            $scope.myImpacts = [];
-
-            var i = 0;
-            while (i < rows.length) {
-                var record = rows[i].split(',');
-                if (!record[0]) {
-                    i = rows.length;
-                } else {
-                    var group = _.find($scope.results, {
-                        'service_type': record[headers.service_col],
-                        'impact_type': record[headers.itype_col]
-                    });
-                    if (group) {
-                        group.total += parseInt(record[headers.iquantity_col], 10);
-                    } else {
-                        $scope.results.push({
-                            service_type: record[headers.service_col],
-                            impact_type: record[headers.itype_col],
-                            total: parseInt(record[headers.iquantity_col], 10)
-                        });
+            var required_fields = ['Start Date', 'Campaign', 'Service Type', 'Impact Type', 'Impact Quantity'];
+            var modal = $modal.open({
+                templateUrl: 'modules/core/views/mapping.client.view.html',
+                controller: 'ModalInstanceCtrl',
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    arrays: function() {
+                        return {
+                            required_fields: required_fields,
+                            headers: headers
+                        };
                     }
-                    i++;
                 }
-            }
-            $scope.removeDropzone = true;
+            });
+
+            modal.result.then(function(csvheaders) {
+
+                headers = {
+                    sdate_col: headers.indexOf(csvheaders[0].label),
+                    campaign_col: headers.indexOf(csvheaders[1].label),
+                    service_col: headers.indexOf(csvheaders[2].label),
+                    itype_col: headers.indexOf(csvheaders[3].label),
+                    iquantity_col: headers.indexOf(csvheaders[4].label)
+                };
+
+                $scope.myImpacts = [];
+
+                var i = 0;
+                while (i < rows.length) {
+                    var record = rows[i].split(',');
+                    if (!record[0]) {
+                        i = rows.length;
+                    } else {
+                        var services = _.find($scope.results, {
+                            'service_type': record[headers.service_col],
+                        });
+                        if (services) {
+                            var impacts_index;
+                            if (!services.hasOwnProperty('impacts')) {
+                                services.impacts = [];
+                            } else {
+                                impacts_index = _.findIndex(services.impacts, {
+                                    'impact_type': record[headers.itype_col]
+                                });
+                            }
+                            if (impacts_index > -1) {
+                                services.impacts[impacts_index].total += parseInt(record[headers.iquantity_col], 10);
+                            } else {
+                                services.impacts.push({
+                                    impact_type: record[headers.itype_col],
+                                    total: parseInt(record[headers.iquantity_col], 10)
+                                });
+                            }
+                        }
+                        i++;
+                    }
+                }
+                $scope.removeDropzone = true;
+            });
         }
 
         //Allow user to upload file to add accounts in bulk
@@ -347,8 +380,8 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                         var headers = rows.shift();
 
                         headers = headers.split(',');
-                        $scope.results = [];
                         if (headers.indexOf('Fullness Rate') > -1) {
+                            $scope.results = [];
                             processProjects(rows, headers);
 
                         } else {
@@ -357,7 +390,6 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
 
                     };
                     reader.readAsText(file);
-                    console.log($scope.file);
                 }
                 $scope.file[0] = undefined;
             }
@@ -366,9 +398,10 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
     }
 ])
 
-.controller('ModalInstanceCtrl', ['$state', '$scope', '$filter', '$modalInstance', 'Authentication', 'items',
-    function($state, $scope, $filter, $modalInstance, Authentication, items) {
+.controller('ModalInstanceCtrl', ['$state', '$scope', '$filter', '$modalInstance', 'Authentication', 'arrays',
+    function($state, $scope, $filter, $modalInstance, Authentication, arrays) {
         $scope.user = Authentication.user;
+        $scope.required_fields = arrays.required_fields;
         $scope.model = {
             selected: null,
             lists: {
@@ -376,15 +409,15 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                 B: []
             }
         };
-        // Generate initial model
-        for (var i = 0; i < items.length; ++i) {
+
+        for (var i = 0; i < arrays.headers.length; ++i) {
             $scope.model.lists.A.push({
-                label: items[i]
+                label: arrays.headers[i]
             });
         }
 
         $scope.ok = function() {
-            $modalInstance.close();
+            $modalInstance.close($scope.model.lists.B);
         };
     }
 ]);

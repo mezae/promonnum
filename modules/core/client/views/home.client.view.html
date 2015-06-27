@@ -8,7 +8,13 @@
 	    </div>
 
 	    <div class="col-md-12">
-	    	{{results}}
+	    	<div ng-repeat="service in results">
+		    	<h3>{{service.service_type}}</h3>
+		    	<p>Capacity: {{service.totalCapacity}}</p>
+		    	<p>Attendance: {{service.totalAttendance}}</p>
+		    	<p>Struggle: {{service.lowFullness}}</p>
+		    	<div ng-repeat="impact in service.impacts">{{impact.impact_type}}: {{impact.total}}</div>
+	    	</div>
 	    </div>
 	</div>
 </section>
