@@ -7,9 +7,10 @@
 		    </div>
 	    </div>
 
-	    <div class="col-md-12">
+	    <div class="col-md-12" ng-show="removeDropzone">
 	    	<div ng-repeat="service in results">
 		    	<h3>{{service.service_type}}</h3>
+		    	<p>Projects: {{service.totalProjects}}</p>
 		    	<p>Capacity: {{service.totalCapacity}}</p>
 		    	<p>Attendance: {{service.totalAttendance}}</p>
 		    	<p>Struggle: {{service.lowFullness}}</p>

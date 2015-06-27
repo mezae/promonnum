@@ -173,19 +173,18 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 ]);
 'use strict';
 
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
-	function($resource) {
-		return $resource('api/articles/:articleId', {
-			articleId: '@_id'
-		}, {
-			update: {
-				method: 'PUT'
-			}
-		});
-	}
+//Mapping service used for communicating with the maps REST endpoints
+angular.module('articles').factory('Mapping', ['$resource',
+    function($resource) {
+        return $resource('api/maps/:mapId', {
+            mapId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
 ]);
-
 'use strict';
 
 // Setting up route
@@ -243,6 +242,7 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                 resolve: {
                     arrays: function() {
                         return {
+                            type: 'Projects',
                             required_fields: required_fields,
                             headers: headers
                         };
@@ -284,12 +284,14 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                             group.totalCapacity += parseInt(record[headers.capacity_col], 10);
                             group.totalAttendance += parseInt(record[headers.attendance_col], 10);
                             if (parseFloat(record[headers.fullness_col]) < 50) group.lowFullness++;
+                            group.totalProjects++;
                         } else {
                             $scope.results.push({
                                 service_type: record[headers.service_col],
                                 totalCapacity: parseInt(record[headers.capacity_col], 10),
                                 totalAttendance: parseInt(record[headers.attendance_col], 10),
-                                lowFullness: parseFloat(record[headers.fullness_col]) < 50 ? 1 : 0
+                                lowFullness: parseFloat(record[headers.fullness_col]) < 50 ? 1 : 0,
+                                totalProjects: 1
                             });
                         }
                         i++;
@@ -308,6 +310,7 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                 resolve: {
                     arrays: function() {
                         return {
+                            type: 'Impacts',
                             required_fields: required_fields,
                             headers: headers
                         };
@@ -398,8 +401,8 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
     }
 ])
 
-.controller('ModalInstanceCtrl', ['$state', '$scope', '$filter', '$modalInstance', 'Authentication', 'arrays',
-    function($state, $scope, $filter, $modalInstance, Authentication, arrays) {
+.controller('ModalInstanceCtrl', ['$state', '$scope', '$filter', '$modalInstance', 'Authentication', 'arrays', 'Mapping',
+    function($state, $scope, $filter, $modalInstance, Authentication, arrays, Mapping) {
         $scope.user = Authentication.user;
         $scope.required_fields = arrays.required_fields;
         $scope.model = {
@@ -415,6 +418,27 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                 label: arrays.headers[i]
             });
         }
+
+        $scope.create = function() {
+            var article = new Mapping({
+                type: arrays.type,
+                map: $scope.model.lists.B
+            });
+            article.$save(function(response) {
+                console.log('map saved');
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        $scope.getMapping = function() {
+            Mapping.query(function(map) {
+                var index = arrays.type === 'Projects' ? 1 : 0;
+                $scope.model.lists.B = map[index].map;
+                console.log(map[index].map);
+            });
+
+        };
 
         $scope.ok = function() {
             $modalInstance.close($scope.model.lists.B);
