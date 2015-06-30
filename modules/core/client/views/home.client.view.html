@@ -1,20 +1,36 @@
 <section data-ng-controller="HomeController">
-	<div class="row hidden-xs">
+	<div class="row">
 	<!-- File Dropzone -->
 		<div class="col-md-12">
 			<div ngf-select ngf-drop ng-model="file" ng-model-rejected="reject" class="drop-box" ng-show="!removeDropzone" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="handleFileSelect()" ngf-accept="'text/csv'" accept=".csv">
-				<p class="lead">drop csv file here or <br/>click to browse<p>
+				<p class="lead">drop csv file here or <br/>click to browse</p>
 		    </div>
 	    </div>
 
 	    <div class="col-md-12" ng-show="removeDropzone">
-	    	<div ng-repeat="service in results">
-		    	<h3>{{service.service_type}}</h3>
-		    	<p>Projects: {{service.totalProjects}}</p>
-		    	<p>Capacity: {{service.totalCapacity}}</p>
-		    	<p>Attendance: {{service.totalAttendance}}</p>
-		    	<p>Struggle: {{service.lowFullness}}</p>
-		    	<div ng-repeat="impact in service.impacts">{{impact.impact_type}}: {{impact.total}}</div>
+	    	<div class="col-md-4" ng-repeat="service in results">
+		    	<h3 class="text-center">{{service.service_type}}</h3>
+		    	<div class="projects">
+		    		<p class="result-number">{{service.totalProjects}}</p>
+		    		<p class="result-label">Projects</p>
+		    	</div>
+		    	<div class="projects attendance">
+		    		<p class="result-number">{{service.totalAttendance}}</p>
+		    		<p class="result-label">Attendance</p>
+		    	</div>
+		    	<div class="divisor">/</div>
+		    	<div class="projects capacity">
+		    		<p class="result-number">{{service.totalCapacity}}</p>
+		    		<p class="result-label">Capacity</p>
+	    		</div>
+		    	<div class="projects struggle">
+		    		<p class="result-number">{{service.lowFullness}}</p>
+		    		<p class="result-label">Struggle</p>
+		    	</div>	
+		    	<div class="projects impacts" ng-repeat="impact in service.impacts">
+		    		<div class="result-impact-type">{{impact.impact_type}}</div>
+		    		<div class="result-impact-total">{{impact.total}}</div>
+		    	</div>
 	    	</div>
 	    </div>
 	</div>

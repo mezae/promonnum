@@ -116,6 +116,7 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                             var impacts_index;
                             if (!services.hasOwnProperty('impacts')) {
                                 services.impacts = [];
+                                impacts_index = -1;
                             } else {
                                 impacts_index = _.findIndex(services.impacts, {
                                     'impact_type': record[headers.itype_col]
@@ -205,12 +206,21 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         };
 
         $scope.getMapping = function() {
+            $scope.model.lists.B = [];
             Mapping.query(function(map) {
-                var index = arrays.type === 'Projects' ? 1 : 0;
-                $scope.model.lists.B = map[index].map;
-                console.log(map[index].map);
+                var index = _.findIndex(map, {
+                    'type': arrays.type
+                });
+                var savedMap = map[index].map;
+                for (var i = 0; i < $scope.required_fields.length; i++) {
+                    var isValidColumn = _.find($scope.model.lists.A, {
+                        'label': savedMap[i].label
+                    });
+                    if (isValidColumn) {
+                        $scope.model.lists.B.push(savedMap[i]);
+                    }
+                }
             });
-
         };
 
         $scope.ok = function() {

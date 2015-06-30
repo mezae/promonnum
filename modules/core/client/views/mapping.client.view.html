@@ -27,7 +27,7 @@
 		
 			<div class="col-md-6">
 				Matching Column Name
-				<ul dnd-list="model.lists.B">
+				<ul dnd-list="model.lists.B" dnd-disable-if="model.lists.B.length >= required_fields.length">
 				    <li ng-repeat="item in model.lists.B"
 				        dnd-draggable="item"
 				        dnd-moved="model.lists.B.splice($index, 1)"
@@ -42,7 +42,7 @@
 
 	</div>
 
-	<button type="button" class="btn btn-upload" ng-click="create()">Save Mapping</button>
+	<button type="button" class="btn btn-save" ng-click="create()">Save Mapping</button>
 	<button type="button" class="btn btn-upload" ng-click="getMapping()">Use Saved Mapping</button>
 
 </div>
