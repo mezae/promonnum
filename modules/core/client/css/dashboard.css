@@ -2,6 +2,10 @@ body {
 	background-color: #F1F4F1;
 }
 
+.service-box {
+	min-height: 340px;
+}
+
 .projects {
 	height: 70px;
 	border: 1px dashed #95ffd5;
@@ -61,5 +65,5 @@ p {
 	padding-left: 8px;
 }
 
-/* #a095ff #95bfff #ff95bf*/
+/* #95ffd5 #a095ff #95bfff #ff95bf*/
 

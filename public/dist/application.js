@@ -232,6 +232,8 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         // This provides Authentication context.
         $scope.authentication = Authentication;
 
+        $scope.theColors = ['#a095ff', '#95bfff', '#95ffd5', '#ff95bf'];
+
         function processProjects(rows, headers) {
             var required_fields = ['Start Date', 'Campaign', 'Service Type', 'Capacity', 'Attendance', 'Fullness'];
             var modal = $modal.open({
@@ -365,8 +367,6 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
             });
         }
 
-        //Allow user to upload file to add accounts in bulk
-        //Makes sure CSV file includes required fields, otherwise lets user which fields are missing
         $scope.handleFileSelect = function() {
             if ($scope.file.length) {
                 if ($scope.file[0].type !== 'text/csv') {
@@ -407,7 +407,6 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         $scope.user = Authentication.user;
         $scope.required_fields = arrays.required_fields;
         $scope.model = {
-            selected: null,
             lists: {
                 A: [],
                 B: []
@@ -415,9 +414,15 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         };
 
         for (var i = 0; i < arrays.headers.length; ++i) {
-            $scope.model.lists.A.push({
+            var field = {
                 label: arrays.headers[i]
-            });
+            };
+            var isValidColumn = $scope.required_fields.indexOf(field.label);
+            if (isValidColumn > -1) {
+                $scope.model.lists.B.push(field);
+            } else {
+                $scope.model.lists.A.push(field);
+            }
         }
 
         $scope.create = function() {
@@ -433,6 +438,9 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
         };
 
         $scope.getMapping = function() {
+            if ($scope.model.lists.B.length) {
+                $scope.model.lists.A = $scope.model.lists.A.concat($scope.model.lists.B);
+            }
             $scope.model.lists.B = [];
             Mapping.query(function(map) {
                 var index = _.findIndex(map, {
@@ -440,18 +448,23 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                 });
                 var savedMap = map[index].map;
                 for (var i = 0; i < $scope.required_fields.length; i++) {
-                    var isValidColumn = _.find($scope.model.lists.A, {
+                    var isValidColumn = _.findIndex($scope.model.lists.A, {
                         'label': savedMap[i].label
                     });
-                    if (isValidColumn) {
+                    if (isValidColumn > -1) {
                         $scope.model.lists.B.push(savedMap[i]);
+                        $scope.model.lists.A.splice(isValidColumn, 1);
                     }
                 }
             });
         };
 
-        $scope.ok = function() {
-            $modalInstance.close($scope.model.lists.B);
+        $scope.exitModal = function() {
+            if ($scope.model.lists.B.length === $scope.required_fields.length) {
+                $modalInstance.close($scope.model.lists.B);
+            } else {
+                $modalInstance.close();
+            }
         };
     }
 ]);
