@@ -2,6 +2,11 @@
  * For the correct positioning of the placeholder element, the dnd-list and
  * it's children must have position: relative
  */
+
+ul {
+    margin-bottom: 0;
+}
+
 ul[dnd-list], ul[dnd-list] > li { 
     position: relative;
 }
@@ -13,6 +18,10 @@ ul[dnd-list], ul[dnd-list] > li {
 ul[dnd-list], .reqlist {
     min-height: 42px;
     padding-left: 0px;
+}
+
+.reqlist {
+    margin-bottom: 10px;
 }
 
 /**
@@ -54,23 +63,13 @@ ul[dnd-list] li, li.required {
 }
 
 ul[dnd-list] li.csvheaders {
-    background-color: #337ab7;
-    border: none;
-    border-radius: .25em;
-    color: #fff;
+    border: 1px dashed #a095ff;
+    border-radius: 2px;
+    font-weight: bold;
     float: left;
-    font-weight: 700;
     height: 30px;
-    margin: 5px;
-    padding: 5px 8px;
+    margin: 5px 5px 0 5px;
+    padding: 5px 10px;
     text-align: center;
     width: auto;
-}
-
-/**
- * Show selected elements in green
- */
-ul[dnd-list] li.selected {
-    background-color: #dff0d8;
-    color: #3c763d;
 }

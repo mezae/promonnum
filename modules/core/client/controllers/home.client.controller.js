@@ -229,6 +229,12 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                         $scope.model.lists.A.splice(isValidColumn, 1);
                     }
                 }
+                if ($scope.model.lists.B.length < $scope.required_fields.length) {
+                    console.log('some required fields appear to be missing from your csv file');
+                } else {
+                    $scope.isSavedMapping = true;
+                }
+
             });
         };
 

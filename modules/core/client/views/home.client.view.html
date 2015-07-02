@@ -7,30 +7,32 @@
 		    </div>
 	    </div>
 
-	    <div class="col-md-12" ng-show="removeDropzone">
-	    	<div class="col-md-4 service-box" ng-repeat="service in results">
-		    	<h3 class="text-center">{{service.service_type}}</h3>
-		    	<div class="projects" ng-style="{'border-color': theColors[$index % theColors.length]}">
-		    		<p class="result-number">{{service.totalProjects}}</p>
-		    		<p class="result-label">Projects</p>
-		    	</div>
-		    	<div class="projects attendance" ng-style="{'border-color': theColors[$index % theColors.length]}">
-		    		<p class="result-number">{{service.totalAttendance}}</p>
-		    		<p class="result-label">Attendance</p>
-		    	</div>
-		    	<div class="divisor">/</div>
-		    	<div class="projects capacity" ng-style="{'border-color': theColors[$index % theColors.length]}">
-		    		<p class="result-number">{{service.totalCapacity}}</p>
-		    		<p class="result-label">Capacity</p>
-	    		</div>
-		    	<div class="projects struggle" ng-style="{'border-color': theColors[$index % theColors.length]}">
-		    		<p class="result-number">{{service.lowFullness}}</p>
-		    		<p class="result-label">Struggle</p>
-		    	</div>	
-		    	<div class="projects impacts" ng-repeat="impact in service.impacts" ng-style="{'border-color': theColors[$parent.$index % theColors.length]}">
-		    		<div class="result-impact-type">{{impact.impact_type}}</div>
-		    		<div class="result-impact-total">{{impact.total}}</div>
-		    	</div>
+	    <div class="col-md-12 dashboard" ng-show="removeDropzone">
+	    	<div ng-repeat="service in results" ng-class="$index % 3 === 2 ? 'row' : ''">
+		    	<div class="col-md-4">
+			    	<h3 class="text-center">{{service.service_type}}</h3>
+			    	<div class="projects" ng-style="{'border-color': theColors[$index % theColors.length]}">
+			    		<p class="result-number">{{service.totalProjects}}</p>
+			    		<p class="result-label">Projects</p>
+			    	</div>
+			    	<div class="projects attendance" ng-style="{'border-color': theColors[$index % theColors.length]}">
+			    		<p class="result-number">{{service.totalAttendance}}</p>
+			    		<p class="result-label">Attendance</p>
+			    	</div>
+			    	<div class="divisor">/</div>
+			    	<div class="projects capacity" ng-style="{'border-color': theColors[$index % theColors.length]}">
+			    		<p class="result-number">{{service.totalCapacity}}</p>
+			    		<p class="result-label">Capacity</p>
+		    		</div>
+			    	<div class="projects struggle" ng-style="{'border-color': theColors[$index % theColors.length]}">
+			    		<p class="result-number">{{service.lowFullness}}</p>
+			    		<p class="result-label">Struggle</p>
+			    	</div>	
+			    	<div class="projects impacts" ng-repeat="impact in service.impacts" ng-style="{'border-color': theColors[$parent.$index % theColors.length]}">
+			    		<div class="result-impact-type">{{impact.impact_type}}</div>
+			    		<div class="result-impact-total" ng-style="{'border-color': theColors[$parent.$index % theColors.length]}">{{impact.total}}</div>
+			    	</div>
+			    </div>
 	    	</div>
 	    </div>
 	</div>
