@@ -140,10 +140,9 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
             });
         }
 
-        $scope.handleFileSelect = function(files) {
-            console.log(files);
+        $scope.handleFileSelect = function(files, event, reject) {
             if (files.length) {
-                if (files[0].type !== 'text/csv') {
+                if ('application/vnd.ms-excel, text/csv'.indexOf(files[0].type) === -1) {
                     $scope.alert = {
                         active: true,
                         type: 'danger',
@@ -156,8 +155,6 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                         var content = file.target.result;
                         var rows = content.split(/[\r\n|\n]+/);
                         var headers = rows.shift();
-
-                        console.log(headers);
                         headers = headers.split(',');
                         if (headers.indexOf('Fullness Rate') > -1) {
                             $scope.results = [];
