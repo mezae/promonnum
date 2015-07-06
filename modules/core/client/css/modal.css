@@ -17,7 +17,7 @@ ul[dnd-list], ul[dnd-list] > li {
  */
 ul[dnd-list], .reqlist {
     min-height: 42px;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .reqlist {
