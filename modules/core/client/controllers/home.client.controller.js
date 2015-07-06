@@ -140,16 +140,16 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
             });
         }
 
-        $scope.handleFileSelect = function() {
-            if ($scope.file.length) {
-                if ($scope.file[0].type !== 'text/csv') {
+        $scope.handleFileSelect = function(files) {
+            if (files.length) {
+                if (files[0].type !== 'text/csv') {
                     $scope.alert = {
                         active: true,
                         type: 'danger',
                         msg: 'Must be a csv file!'
                     };
                 } else {
-                    var file = $scope.file[0];
+                    var file = files[0];
                     var reader = new FileReader();
                     reader.onload = function(file) {
                         var content = file.target.result;
@@ -168,7 +168,7 @@ angular.module('core').controller('HomeController', ['$scope', '$modal', 'Authen
                     };
                     reader.readAsText(file);
                 }
-                $scope.file[0] = undefined;
+                files[0] = undefined;
             }
         };
 
